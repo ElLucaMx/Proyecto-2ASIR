@@ -1,7 +1,7 @@
 # Pool donde se van a almacenar los discos creados
 variable "libvirt_pool_name" {
   type        = string
-  description = "Nombre del pool de almacenamiento libvirt."
+  description = "Nombre del pool default."
   default     = "default"
 }
 
