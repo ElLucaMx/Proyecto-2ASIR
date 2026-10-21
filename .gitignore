@@ -1,0 +1,45 @@
+# --- OpenTofu / Terraform ---
+# Archivos de estado (¡nunca deben subirse!)
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Directorio de plugins y módulos locales de OpenTofu
+.terraform/
+.terraform.lock.hcl
+
+# Inventarios generados automáticamente por OpenTofu (si se guardan localmente)
+inventory
+inventory.yaml
+inventory.json
+*.inv
+
+# --- Ansible ---
+# Directorios temporales y de reintentos
+.ansible/
+*.retry
+
+# --- Sistema operativo y editores ---
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux / Editores
+*~
+.swp
+.swo
+.vscode/
+.idea/
