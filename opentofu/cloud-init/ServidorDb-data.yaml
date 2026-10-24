@@ -1,0 +1,22 @@
+#cloud-config
+hostname: ServidorDb
+
+timezone: Europe/Madrid
+users:
+  - name: ubuntu-Db
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC5iXHvcDSji9AliZZtXdwQkmpyXLDsP5el7MLqzci0jXMVpZHUhN/H/uuVWqIPb/ToqPje7j865ARdoCN2WIELAeQeud/QNsK7N2FnxFDR/oMIJvPNmx0tJ0+GGnniI9t2//uy2H+JIbteRtT5wBMzjRtQK3UdpzBE0kiT36ssPyz22hRy9nDPRnVKm/MIgHa8ZnjBTpomM7KxLSdwUTxJP9SwoAz7ih1crcZFosDKowY6zDhvBZsMFokWtmnliPWtHgBTOyADiBBIPEHxqaI+ctmJcKsVpzxp/ZQlFySbP2vqCPcx1AABFlci+LLfaozCsHQyTJfiQzHKe5rgYHIs9k0UuAWk33uRSvpIlNXIVxnTqfQ5DMBeFxAiHfnZ4FbF5IEp74o/8SzYPTZS8bwN8gtoCHxPXl2B3GcReS76VqRcseBxlBX5WU3/SYme0oMyPdlK3hTFNg250ueVFN3+bJ0kM03pgHykuPIvawd3VL67lh5/4Mr3bIRsVGpI55M= usuario@Deby
+
+
+chpasswd:
+  expire: False
+  users:
+    - name: ubuntu-db
+      password: asdasd
+      type: text
+
+package_update: true  # refresca índices de apt
+package_upgrade: true # aplica actualizaciones disponibles en el primer arranque
