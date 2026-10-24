@@ -21,19 +21,19 @@ resource "libvirt_cloudinit_disk" "ServidorWeb-cloudinit" {
 
 # Asignar recursos
 resource "libvirt_domain" "ServidorWeb" {
-  name   = "ej5-server1"
+  name   = "ServidorWeb"
   memory = 1024
   vcpu   = 2
 
-  # Red maria-dhcp
+  # Red maria-dhcp (NAT)
   network_interface {
     network_id     = libvirt_network.maria-dhcp.id
     wait_for_lease = true
   }
 
-  # Red soto-solitario
+  # Red soto-solitario (Aislada de datos)
   network_interface {
-    network_id = libvirt_network.ServidorWeb.id
+    network_id = libvirt_network.soto-solitario.id
   }
 
   # Discos
@@ -70,22 +70,21 @@ resource "libvirt_cloudinit_disk" "ServidorDb-cloudinit" {
 }
 
 # Asignar recursos
-resource "libvirt_domain" "ej5-server2" {
-  name   = "ej5-server2"
+resource "libvirt_domain" "ServidorDb" {
+  name   = "ServidorDb"
   memory = 1024
   vcpu   = 2
 
-  # Red maria-dhcp   
+  # Red maria-dhcp (NAT)   
   network_interface {
     network_id     = libvirt_network.maria-dhcp.id
     wait_for_lease = true
   }
 
-  # Red soto-solitario
+  # Red soto-solitario (Aislada de datos)
   network_interface {
-    network_id = libvirt_network.ServidorWeb.id
+    network_id = libvirt_network.soto-solitario.id
   }
-
 
   # Discos
   disk { volume_id = libvirt_volume.ServidorDb-disk.id }
