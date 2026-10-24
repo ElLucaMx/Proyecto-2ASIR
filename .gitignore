@@ -20,6 +20,8 @@ inventory
 inventory.yaml
 inventory.json
 *.inv
+hosts
+ansible/hosts
 
 # --- Ansible ---
 # Directorios temporales y de reintentos
