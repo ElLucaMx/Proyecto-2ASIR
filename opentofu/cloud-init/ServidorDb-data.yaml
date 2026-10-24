@@ -3,7 +3,7 @@ hostname: ServidorDb
 
 timezone: Europe/Madrid
 users:
-  - name: ubuntu-Db
+  - name: ubuntu-db
     sudo: ALL=(ALL) NOPASSWD:ALL
     groups: users, admin
     shell: /bin/bash
