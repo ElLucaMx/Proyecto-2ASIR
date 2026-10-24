@@ -4,7 +4,7 @@
 web ansible_host=${ip_web} ansible_user=debian-web
 
 [servidores_bd]
-# Si la base de datos solo está en la red interna y quieres acceder mediante ProxyJump a través del servidor web (como en el ejemplo de tu profesor):
+# Acceder a la base de datos por red interna 
 bd ansible_host=10.0.0.2 ansible_user=ubuntu-Db ansible_ssh_common_args='-o ProxyJump=debian-web@${ip_web}'
 
 [servidores:children]
