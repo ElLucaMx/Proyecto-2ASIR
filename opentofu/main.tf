@@ -25,9 +25,9 @@ resource "libvirt_domain" "ServidorWeb" {
   memory = 1024
   vcpu   = 2
 
-  # Red default
+  # Red maria-dhcp
   network_interface {
-    network_id     = libvirt_network.default.id
+    network_id     = libvirt_network.maria-dhcp.id
     wait_for_lease = true
   }
 
