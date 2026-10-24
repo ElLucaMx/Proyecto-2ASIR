@@ -4,8 +4,7 @@
 web ansible_host=${ip_web} ansible_user=debian-web
 
 [servidores_bd]
-# Acceder a la base de datos por red interna 
-bd ansible_host=10.0.0.2 ansible_user=ubuntu-Db ansible_ssh_common_args='-o ProxyJump=debian-web@${ip_web}'
+bd ansible_host=${ip_db} ansible_user=ubuntu-db
 
 [servidores:children]
 servidores_web
