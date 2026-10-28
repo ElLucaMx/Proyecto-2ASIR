@@ -1,11 +1,11 @@
 ---
-- name: Instalar Apache y PHP con sus módulos
+- name: Instalar Apache, PHP y módulos necesarios
   ansible.builtin.apt:
     name:
       - apache2
       - php
       - libapache2-mod-php
-      - php-mysql
+      - php-mysqli
       - git
     state: present
     update_cache: yes
@@ -16,11 +16,12 @@
     state: started
     enabled: yes
 
-- name: Clonar o copiar el código de la aplicación guestbook_php
+- name: Clonar el repositorio de la aplicación guestbook
   ansible.builtin.git:
-    repo: 'https://github.com/josejuansanchez/guestbook-php.git' # O la URL del repositorio que uses para la app
+    repo: 'https://github.com/josejuansanchez/guestbook-php.git'
     dest: /var/www/html/guestbook
-    force: yes
+    version: master
+    force: no # Para que no sobrescriba cambios locales si ya existe
 
 - name: Generar el fichero config.php mediante plantilla
   ansible.builtin.template:
@@ -32,19 +33,17 @@
   ansible.builtin.template:
     src: vhost.conf.j2
     dest: /etc/apache2/sites-available/guestbook.conf
+    mode: '0644'
   notify: Reiniciar Apache
 
-- name: Habilitar el sitio web y desactivar el por defecto
-  ansible.builtin.ansible.builtin.command: # o usar a2ensite / a2dissite
-  # Alternativa limpia con comandos de apache:
+- name: Desactivar el sitio por defecto de Apache
+  ansible.builtin.command: a2dissite 000-default.conf
+  args:
+    creates: /etc/apache2/sites-enabled/000-default.conf # Si ya está desactivado, no hace nada (idempotente)
+  notify: Reiniciar Apache
+
+- name: Activar el sitio guestbook en Apache
+  ansible.builtin.command: a2ensite guestbook.conf
   args:
     creates: /etc/apache2/sites-enabled/guestbook.conf
-  notify: Reiniciar Apache
-
-- name: Activar site guestbook en Apache
-  ansible.builtin.command: a2ensite guestbook.conf
-  notify: Reiniciar Apache
-
-- name: Desactivar site por defecto de Apache
-  ansible.builtin.command: a2dissite 000-default.conf
   notify: Reiniciar Apache

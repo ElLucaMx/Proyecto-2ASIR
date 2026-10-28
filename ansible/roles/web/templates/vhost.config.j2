@@ -1,0 +1,13 @@
+<VirtualHost *:80>
+    ServerName {{ dominio_web }}
+    DocumentRoot /var/www/html/guestbook
+
+    <Directory /var/www/html/guestbook>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/guestbook_error.log
+    CustomLog ${APACHE_LOG_DIR}/guestbook_access.log combined
+</VirtualHost>
