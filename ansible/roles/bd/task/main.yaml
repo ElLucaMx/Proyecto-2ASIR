@@ -1,0 +1,36 @@
+---
+- name: Instalar MariaDB y paquetes necesarios
+  ansible.builtin.apt:
+    name:
+      - mariadb-server
+      - mariadb-client
+    state: present
+    update_cache: yes
+
+- name: Asegurar que el servicio MariaDB está iniciado y habilitado
+  ansible.builtin.service:
+    name: mariadb
+    state: started
+    enabled: yes
+
+- name: Configurar MariaDB para que escuche en la red de datos (bind-address)
+  ansible.builtin.lineinfile:
+    path: /etc/mysql/mariadb.conf.d/50-server.cnf
+    regexp: '^bind-address'
+    line: 'bind-address = {{ db_host }}'
+  notify: Reiniciar MariaDB
+
+- name: Crear la base de datos de la aplicación
+  ansible.builtin.mysql_db:
+    name: "{{ db_name }}"
+    state: present
+    encoding: utf8mb4
+    collation: utf8mb4_unicode_ci
+
+- name: Crear el usuario de base de datos con acceso exclusivo desde la red de datos del web
+  ansible.builtin.mysql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    host: "10.0.0.1"
+    priv: "{{ db_name }}.*:ALL"
+    state: present
