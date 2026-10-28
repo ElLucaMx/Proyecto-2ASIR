@@ -1,0 +1,7 @@
+---
+# Configuración general de la aplicación
+db_name: "guestbook"
+db_user: "web_user"
+db_password: "passwd"
+# IP de la red de datos del servidor
+db_host: "10.0.0.2"
