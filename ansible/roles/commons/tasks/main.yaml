@@ -1,0 +1,14 @@
+---
+- name: Actualizar la cache de apt y actualizar paquetes
+  ansible.builtin.apt:
+    update_cache: yes
+    upgrade: safe
+    cache_valid_time: 3600
+
+- name: Instalar paquetes comunes del sistema
+  ansible.builtin.apt:
+    name:
+      - curl
+      - git
+      - python3-pymysql
+    state: present
