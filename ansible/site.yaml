@@ -1,0 +1,18 @@
+---
+- name: Configurar infraestructura común en todos los servidores
+  hosts: servidores
+  become: yes
+  roles:
+    - commons
+
+- name: Configurar el servidor de Base de Datos
+  hosts: servidores_bd
+  become: yes
+  roles:
+    - bd
+
+- name: Configurar el Servidor Web y la aplicación
+  hosts: servidores_web
+  become: yes
+  roles:
+    - web
