@@ -20,6 +20,20 @@
     line: 'bind-address = {{ db_host }}'
   notify: Reiniciar MariaDB
 
+- name: Permitir autenticación por contraseña para root en MariaDB (o asegurar socket)
+  ansible.builtin.shell: |
+    mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('rootpassword'); FLUSH PRIVILEGES;"
+  ignore_errors: yes
+
+- name: Crear archivo de credenciales de root para Ansible (.my.cnf)
+  ansible.builtin.copy:
+    dest: /root/.my.cnf
+    content: |
+      [client]
+      user=root
+      password=rootpassword
+    mode: '0600'
+
 - name: Crear la base de datos de la aplicación
   ansible.builtin.mysql_db:
     name: "{{ db_name }}"
