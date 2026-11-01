@@ -1,9 +1,10 @@
 ---
-- name: Instalar MariaDB y paquetes necesarios
+- name: Instalar MariaDB, cliente y conector de Python para MySQL
   ansible.builtin.apt:
     name:
       - mariadb-server
       - mariadb-client
+      - python3-mysqldb
     state: present
     update_cache: yes
 
@@ -20,25 +21,53 @@
     line: 'bind-address = {{ db_host }}'
   notify: Reiniciar MariaDB
 
-- name: Asegurar que existe el directorio para la configuración de root de MySQL
-  ansible.builtin.file:
-    path: /root/.my.cnf
-    state: absent
-  # Opcional: si queremos usar autenticación por socket del sistema operativo nativa,
-  # no necesitamos forzar una contraseña de root local para Ansible, ya que root del sistema 
-  # accede por socket automáticamente con los módulos de MariaDB.
-
 - name: Crear la base de datos de la aplicación
+  become: true
+  become_user: root
   community.mysql.mysql_db:
     name: "{{ db_name }}"
     state: present
     encoding: utf8mb4
     collation: utf8mb4_unicode_ci
+    login_unix_socket: /run/mysqld/mysqld.sock
+    login_user: root
 
 - name: Crear el usuario de base de datos con acceso exclusivo desde la red de datos del web
+  become: true
+  become_user: root
   community.mysql.mysql_user:
     name: "{{ db_user }}"
     password: "{{ db_password }}"
     host: "10.0.0.1"
     priv: "{{ db_name }}.*:ALL"
     state: present
+    login_user: root
+    login_unix_socket: /run/mysqld/mysqld.sock
+
+- name: Clonar temporalmente el repositorio para obtener el script SQL en el servidor de BD
+  ansible.builtin.git:
+    repo: 'https://github.com/VidaInformatico/Sistema-de-biblioteca-basico-php-8-y-mysql.git'
+    dest: /tmp/sistema-biblioteca
+    force: yes
+
+- name: Comprobar si las tablas de la biblioteca ya existen
+  become: true
+  become_user: root
+  community.mysql.mysql_query:
+    login_user: root
+    login_unix_socket: /run/mysqld/mysqld.sock
+    login_db: "{{ db_name }}"
+    query: "SHOW TABLES LIKE 'autor';"
+  register: tabla_autor_comprobacion
+  changed_when: false
+
+- name: Importar el esquema de la base de datos (biblioteca.sql)
+  become: true
+  become_user: root
+  community.mysql.mysql_db:
+    name: "{{ db_name }}"
+    state: import
+    target: /tmp/sistema-biblioteca/biblioteca.sql
+    login_user: root
+    login_unix_socket: /run/mysqld/mysqld.sock
+  when: tabla_autor_comprobacion.query_result[0] | length == 0

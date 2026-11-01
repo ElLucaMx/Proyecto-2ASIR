@@ -1,4 +1,8 @@
 ---
+- name: Esperar a que cloud-init termine la inicialización
+  ansible.builtin.command: cloud-init status --wait
+  changed_when: false
+
 - name: Actualizar la cache de apt y actualizar paquetes
   ansible.builtin.apt:
     update_cache: yes
