@@ -1,2 +1,3 @@
 ---
 dominio_web: "www.proyecto2asir.org"
+app_base_url: "http://{{ ansible_host }}/"

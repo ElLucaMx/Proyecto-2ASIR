@@ -3,5 +3,3 @@ db_host: "10.0.0.2"        # IP del ServidorDb en la red soto-solitario (o su IP
 db_name: "biblioteca"      # Nombre de la base de datos
 db_user: "usuario_db"      # Usuario de la base de datos
 db_password: "password_db" # Contraseña de la base de datos
-
-app_base_url: "http://172.19.1.79/"

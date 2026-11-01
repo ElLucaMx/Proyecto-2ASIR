@@ -21,12 +21,6 @@
     path: /var/www/html/index.html
     state: absent
 
-#- name: Clonar o actualizar el repositorio de la biblioteca desde GitHub
-#  ansible.builtin.git:
-#    repo: 'https://github.com/VidaInformatico/Sistema-de-biblioteca-basico-php-8-y-mysql.git'
-#    dest: /var/www/html/
-#    force: no
-
 - name: Clonar el repositorio de la biblioteca desde GitHub
   ansible.builtin.git:
     repo: 'https://github.com/VidaInformatico/Sistema-de-biblioteca-basico-php-8-y-mysql.git'
@@ -51,13 +45,18 @@
   notify: Reiniciar Apache
 
 - name: Desactivar el sitio por defecto de Apache de forma idempotente
-  ansible.builtin.command: a2dissite 000-default.conf
-  args:
-    creates: /etc/apache2/sites-enabled/000-default.conf
+  ansible.builtin.file:
+    path: /etc/apache2/sites-enabled/000-default.conf
+    state: absent
   notify: Reiniciar Apache
 
 - name: Activar el nuevo sitio de la biblioteca en Apache
   ansible.builtin.command: a2ensite biblioteca.conf
   args:
-    creates: /etc/apache2/sites-enabled/000-default.conf
+    creates: /etc/apache2/sites-enabled/biblioteca.conf
   notify: Reiniciar Apache
+
+- name: Habilitar el módulo rewrite de Apache para el enrutamiento MVC
+  ansible.builtin.command: a2enmod rewrite
+  notify: Reiniciar Apache
+  changed_when: false
