@@ -6,6 +6,10 @@ web ansible_host=${ip_web} ansible_user=debian-web
 [servidores_bd]
 bd ansible_host=${ip_db} ansible_user=ubuntu-db
 
+[servidores_almacenamiento]
+almacenamiento ansible_host=${ip_almacenamiento} ansible_user=alpine
+
 [servidores:children]
 servidores_web
 servidores_bd
+servidores_almacenamiento

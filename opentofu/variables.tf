@@ -18,3 +18,10 @@ variable "base_image_ubuntu" {
   description = "Nombre de la imagen base Ubuntu en el pool."
   default     = "ubuntu2604-base.qcow2"
 }
+
+# Imagen base Alpine para ServidorAlmacenamiento
+variable "base_image_alpine" {
+  type        = string
+  description = "Nombre de la imagen base Alpine en el pool."
+  default     = "alpine-base.qcow2"
+}
