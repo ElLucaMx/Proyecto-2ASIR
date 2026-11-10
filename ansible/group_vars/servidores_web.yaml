@@ -1,3 +1,8 @@
 ---
+# Configuración del sitio web
 dominio_web: "www.proyecto2asir.org"
-app_base_url: "http://{{ ansible_host }}/"
+
+# Configuración de Guestbook
+guestbook_title: "Libro de visitas - Proyecto 2ASIR"
+guestbook_per_page: 10
+guestbook_timezone: "Europe/Madrid"

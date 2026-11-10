@@ -1,5 +1,10 @@
 ---
-db_host: "10.0.0.2"        # IP del ServidorDb en la red soto-solitario (o su IP correspondiente)
-db_name: "biblioteca"      # Nombre de la base de datos
-db_user: "usuario_db"      # Usuario de la base de datos
-db_password: "password_db" # Contraseña de la base de datos
+# Configuración de MariaDB
+db_host: "10.0.0.2"
+db_port: 3306
+db_name: "guestbook"
+db_user: "guestbook_user"
+db_password: "password_guestbook"
+
+# Configuración de Guestbook
+guestbook_table: "guestbook"

@@ -1,7 +1,23 @@
 <?php
-const base_url = "{{ app_base_url }}";
-const host = "{{ db_host }}";
-const user = "{{ db_user }}";
-const pass = "{{ db_password }}";
-const db = "{{ db_name }}";
-const charset = "charset=utf8mb4";
+
+// Configuración del libro de visitas
+
+$title = "{{ guestbook_title }}";
+
+$per_page = {{ guestbook_per_page }};
+
+$timezone = "{{ guestbook_timezone }}";
+
+// Configuración de la base de datos
+
+$hostname = "{{ db_host }}";
+
+$port = {{ db_port }};
+
+$hostuser = "{{ db_user }}";
+
+$hostpass = "{{ db_password }}";
+
+$dbname = "{{ db_name }}";
+
+$tablename = "{{ guestbook_table }}";
