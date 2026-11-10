@@ -3,16 +3,22 @@
   ansible.builtin.command: cloud-init status --wait
   changed_when: false
 
-- name: Actualizar la cache de apt y actualizar paquetes
+- name: Actualizar paquetes en Debian y Ubuntu
   ansible.builtin.apt:
     update_cache: yes
     upgrade: safe
     cache_valid_time: 3600
+  when: ansible_facts.pkg_mgr == 'apt'
+
+- name: Actualizar paquetes en Alpine
+  community.general.apk:
+    update_cache: true
+    upgrade: true
+  when: ansible_facts.pkg_mgr == 'apk'
 
 - name: Instalar paquetes comunes del sistema
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name:
       - curl
       - git
-      - python3-pymysql
     state: present
