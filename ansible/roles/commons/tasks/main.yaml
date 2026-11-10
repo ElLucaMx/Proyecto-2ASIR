@@ -3,7 +3,7 @@
   ansible.builtin.command: cloud-init status --wait
   changed_when: false
 
-- name: Actualizar paquetes en Debian y Ubuntu
+- name: Actualizar la cache de paquetes en Debian y Ubuntu
   ansible.builtin.apt:
     update_cache: yes
     upgrade: safe

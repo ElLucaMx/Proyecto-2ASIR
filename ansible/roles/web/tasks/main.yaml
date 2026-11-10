@@ -1,12 +1,11 @@
 ---
-- name: Instalar Apache, PHP y módulos necesarios para MariaDB
+- name: Instalar Apache, PHP y extensión MySQLi
   ansible.builtin.apt:
     name:
       - apache2
       - php
       - libapache2-mod-php
       - php-mysql
-      - php-mysqli
     state: present
     update_cache: yes
 
@@ -16,47 +15,52 @@
     state: started
     enabled: yes
 
-- name: Eliminar el fichero index.html por defecto de Apache si existe
+- name: Crear el directorio de Guestbook
   ansible.builtin.file:
-    path: /var/www/html/index.html
-    state: absent
+    path: /var/www/guestbook
+    state: directory
+    owner: root
+    group: www-data
+    mode: '0755'
 
-- name: Clonar el repositorio de la biblioteca desde GitHub
+- name: Clonar el repositorio de Guestbook desde GitHub
   ansible.builtin.git:
-    repo: 'https://github.com/VidaInformatico/Sistema-de-biblioteca-basico-php-8-y-mysql.git'
-    dest: /var/www/html/
-    force: no
-    update: no
+    repo: 'https://github.com/whoisYoges/simple-guestbook.git'
+    dest: /var/www/guestbook
+    version: master
+    force: yes
+    update: yes
 
-- name: Configurar la conexión a la base de datos mediante plantilla
+- name: Configurar la conexión a MariaDB mediante plantilla
   ansible.builtin.template:
     src: config.php.j2
-    dest: /var/www/html/Config/Config.php
-    owner: www-data
+    dest: /var/www/guestbook/config.php
+    owner: root
     group: www-data
-    mode: '0644'
+    mode: '0640'
   notify: Reiniciar Apache
 
-- name: Configurar el Virtual Host de Apache para la aplicación
+- name: Configurar el VirtualHost de Guestbook
   ansible.builtin.template:
     src: vhost.conf.j2
-    dest: /etc/apache2/sites-available/biblioteca.conf
+    dest: /etc/apache2/sites-available/guestbook.conf
+    owner: root
+    group: root
     mode: '0644'
   notify: Reiniciar Apache
 
-- name: Desactivar el sitio por defecto de Apache de forma idempotente
+- name: Desactivar el sitio predeterminado de Apache
   ansible.builtin.file:
     path: /etc/apache2/sites-enabled/000-default.conf
     state: absent
   notify: Reiniciar Apache
 
-- name: Activar el nuevo sitio de la biblioteca en Apache
-  ansible.builtin.command: a2ensite biblioteca.conf
+- name: Activar el VirtualHost de Guestbook
+  ansible.builtin.command: a2ensite guestbook.conf
   args:
-    creates: /etc/apache2/sites-enabled/biblioteca.conf
+    creates: /etc/apache2/sites-enabled/guestbook.conf
   notify: Reiniciar Apache
 
-- name: Habilitar el módulo rewrite de Apache para el enrutamiento MVC
-  ansible.builtin.command: a2enmod rewrite
-  notify: Reiniciar Apache
+- name: Comprobar la configuración de Apache
+  ansible.builtin.command: apache2ctl configtest
   changed_when: false

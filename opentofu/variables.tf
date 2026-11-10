@@ -25,3 +25,24 @@ variable "base_image_alpine" {
   description = "Nombre de la imagen base Alpine en el pool."
   default     = "alpine-base.qcow2"
 }
+
+# Memoria RAM servidor ServidorWeb
+variable "memory_web" {
+  type        = number
+  description = "Memoria RAM del servidor web."
+  default     = 1024
+}
+
+# Memoria RAM ServidorBaseDatos
+variable "memory_db" {
+  type        = number
+  description = "Memoria RAM del servidor de base de datos."
+  default     = 1024
+}
+
+# Memoria RAM ServidorAlmacenamiento
+variable "memory_almacenamiento" {
+  type        = number
+  description = "Memoria RAM del servidor de almacenamiento."
+  default     = 1024
+}
