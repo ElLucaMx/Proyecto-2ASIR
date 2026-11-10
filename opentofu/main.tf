@@ -22,7 +22,7 @@ resource "libvirt_cloudinit_disk" "ServidorWeb-cloudinit" {
 # Asignar recursos
 resource "libvirt_domain" "ServidorWeb" {
   name   = "ServidorWeb"
-  memory = 1024
+  memory = var.memory_web
   vcpu   = 2
 
   # Red maria-dhcp (NAT)
@@ -72,7 +72,7 @@ resource "libvirt_cloudinit_disk" "ServidorDb-cloudinit" {
 # Asignar recursos
 resource "libvirt_domain" "ServidorDb" {
   name   = "ServidorDb"
-  memory = 1024
+  memory = var.memory_db
   vcpu   = 2
 
   # Red maria-dhcp (NAT)   
@@ -122,7 +122,7 @@ resource "libvirt_cloudinit_disk" "ServidorAlmacenamiento-cloudinit" {
 # Asignar recursos
 resource "libvirt_domain" "ServidorAlmacenamiento" {
   name   = "ServidorAlmacenamiento"
-  memory = 1024
+  memory = var.memory_almacenamiento
   vcpu   = 2
 
   # Red maria-dhcp (NAT)
