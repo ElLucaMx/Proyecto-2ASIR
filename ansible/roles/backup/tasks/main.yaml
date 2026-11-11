@@ -1,0 +1,36 @@
+---
+- name: Instalar el servidor NFS y sus scripts de OpenRC
+  ansible.builtin.package:
+    name:
+      - nfs-utils
+      - nfs-utils-openrc
+    state: present
+
+- name: Crear el directorio de almacenamiento de copias
+  ansible.builtin.file:
+    path: "{{ nfs_export_path }}"
+    state: directory
+    owner: "65534"
+    group: "65534"
+    mode: '0770'
+
+- name: Configurar la exportación NFS
+  ansible.builtin.template:
+    src: exports.j2
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Aplicar exportaciones NFS
+
+- name: Habilitar e iniciar rpcbind
+  ansible.builtin.service:
+    name: rpcbind
+    state: started
+    enabled: true
+
+- name: Habilitar e iniciar el servidor NFS
+  ansible.builtin.service:
+    name: nfs
+    state: started
+    enabled: true

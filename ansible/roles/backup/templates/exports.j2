@@ -1,0 +1,4 @@
+# Directorio de copias de seguridad de MariaDB.
+# Solo se permite el acceso desde el servidor de base de datos.
+
+{{ nfs_export_path }} {{ db_host }}(rw,sync,no_subtree_check,root_squash,anonuid=65534,anongid=65534)
