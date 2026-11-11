@@ -92,9 +92,6 @@
   ansible.builtin.file:
     path: "{{ nfs_mount_path }}"
     state: directory
-    owner: root
-    group: root
-    mode: '0755'
 
 - name: Configurar el montaje NFS permanente en fstab
   ansible.builtin.lineinfile:
