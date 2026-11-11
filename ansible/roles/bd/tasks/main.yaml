@@ -68,3 +68,81 @@
     state: present
     login_user: root
     login_unix_socket: /run/mysqld/mysqld.sock
+
+# --- COPIAS DE SEGURIDAD NFS ---
+# --- COPIAS DE SEGURIDAD NFS ---
+
+- name: Instalar el cliente NFS y las herramientas de copias
+  ansible.builtin.apt:
+    name:
+      - nfs-common
+      - cron
+      - gzip
+      - util-linux
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Asegurar que el servicio cron está iniciado y habilitado
+  ansible.builtin.service:
+    name: cron
+    state: started
+    enabled: yes
+
+- name: Crear el punto de montaje NFS
+  ansible.builtin.file:
+    path: "{{ nfs_mount_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Configurar el montaje NFS permanente en fstab
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    regexp: '^\\S+\\s+{{ nfs_mount_path | regex_escape }}\\s+'
+    line: "{{ nfs_server_ip }}:{{ nfs_export_path }} {{ nfs_mount_path }} nfs defaults,_netdev,nofail 0 0"
+    state: present
+    backup: yes
+
+- name: Comprobar si el recurso NFS está montado
+  ansible.builtin.command:
+    argv:
+      - mountpoint
+      - -q
+      - "{{ nfs_mount_path }}"
+  register: nfs_mount_status
+  changed_when: false
+  failed_when: false
+
+- name: Montar el recurso NFS
+  ansible.builtin.command:
+    argv:
+      - mount
+      - "{{ nfs_mount_path }}"
+  when: nfs_mount_status.rc != 0
+
+- name: Instalar el script de copias de seguridad de MariaDB
+  ansible.builtin.template:
+    src: backup-mariadb.sh.j2
+    dest: /usr/local/sbin/backup-mariadb.sh
+    owner: root
+    group: root
+    mode: '0750'
+
+- name: Comprobar la sintaxis del script de copias
+  ansible.builtin.command:
+    argv:
+      - bash
+      - -n
+      - /usr/local/sbin/backup-mariadb.sh
+  changed_when: false
+
+- name: Programar las copias diarias de MariaDB
+  ansible.builtin.cron:
+    name: "Copia de seguridad diaria de MariaDB"
+    user: root
+    minute: "{{ backup_cron_minute }}"
+    hour: "{{ backup_cron_hour }}"
+    job: "/usr/local/sbin/backup-mariadb.sh"
+    state: present

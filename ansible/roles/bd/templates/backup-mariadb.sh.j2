@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+BACKUP_DIR={{ nfs_mount_path | quote }}
+DATABASE={{ db_name | quote }}
+RETENTION_DAYS={{ backup_retention_days | int }}
+
+# Evitar escribir en el disco local si NFS no está montado.
+if ! mountpoint -q "$BACKUP_DIR"; then
+    echo "ERROR: el almacenamiento NFS no está montado." >&2
+    exit 1
+fi
+
+# Evitar ejecuciones simultáneas.
+exec 9>/run/lock/backup-mariadb.lock
+
+if ! flock -n 9; then
+    echo "Ya hay otra copia de seguridad en ejecución."
+    exit 0
+fi
+
+# Detectar el nombre del ejecutable de MariaDB.
+if command -v mariadb-dump >/dev/null 2>&1; then
+    DUMP_BIN="$(command -v mariadb-dump)"
+elif command -v mysqldump >/dev/null 2>&1; then
+    DUMP_BIN="$(command -v mysqldump)"
+else
+    echo "ERROR: no se encuentra mariadb-dump ni mysqldump." >&2
+    exit 1
+fi
+
+TIMESTAMP="$(date +'%Y%m%d-%H%M%S')"
+
+BACKUP_FILE="${BACKUP_DIR}/${DATABASE}-${TIMESTAMP}.sql.gz"
+TEMP_FILE="${BACKUP_FILE}.tmp"
+
+cleanup() {
+    rm -f -- "$TEMP_FILE"
+}
+
+trap cleanup EXIT
+
+# Restringir los permisos de los archivos generados.
+umask 077
+
+# Generar el volcado y comprimirlo.
+"$DUMP_BIN" \
+    --protocol=socket \
+    --user=root \
+    --single-transaction \
+    --quick \
+    --databases "$DATABASE" | gzip -c > "$TEMP_FILE"
+
+# Comprobar que el archivo comprimido no está dañado.
+gzip -t "$TEMP_FILE"
+
+# Publicar la copia únicamente cuando se haya completado correctamente.
+mv -- "$TEMP_FILE" "$BACKUP_FILE"
+
+# Eliminar las copias que superen el periodo de conservación.
+find "$BACKUP_DIR" \
+    -maxdepth 1 \
+    -type f \
+    -name "${DATABASE}-*.sql.gz" \
+    -mtime "+${RETENTION_DAYS}" \
+    -delete
+
+trap - EXIT
+
+echo "Copia de seguridad creada: $BACKUP_FILE"
