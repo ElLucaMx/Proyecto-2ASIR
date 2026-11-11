@@ -8,3 +8,13 @@ db_password: "password_guestbook"
 
 # Configuración de Guestbook
 guestbook_table: "guestbook"
+
+# Configuración del almacenamiento NFS
+nfs_server_ip: "10.0.0.3"
+nfs_export_path: "/srv/nfs/mariadb"
+nfs_mount_path: "/mnt/mariadb-backups"
+
+# Configuración de las copias de seguridad
+backup_cron_minute: "0"
+backup_cron_hour: "2"
+backup_retention_days: 14
