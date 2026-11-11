@@ -1,4 +1,0 @@
----
-- name: Aplicar exportaciones NFS
-  ansible.builtin.command: exportfs -ra
-  changed_when: true

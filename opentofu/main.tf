@@ -11,7 +11,7 @@ resource "libvirt_volume" "ServidorWeb-disk" {
   format           = "qcow2"
 }
 
-# ISO cloud-init de debian
+# ISO cloud-init de Debian Web
 resource "libvirt_cloudinit_disk" "ServidorWeb-cloudinit" {
   name           = "ServidorWeb-cloudinit.iso"
   pool           = var.libvirt_pool_name
@@ -111,7 +111,7 @@ resource "libvirt_volume" "ServidorAlmacenamiento-disk" {
   format           = "qcow2"
 }
 
-# ISO cloud-init de alpine
+# ISO cloud-init de Debian Almacenamiento
 resource "libvirt_cloudinit_disk" "ServidorAlmacenamiento-cloudinit" {
   name           = "ServidorAlmacenamiento-cloudinit.iso"
   pool           = var.libvirt_pool_name

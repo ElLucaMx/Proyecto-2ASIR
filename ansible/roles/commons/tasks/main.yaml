@@ -1,23 +1,17 @@
 ---
 - name: Esperar a que cloud-init termine la inicialización
   ansible.builtin.command: cloud-init status --wait
+  register: cloud_init_status
   changed_when: false
+  failed_when: cloud_init_status.rc not in [0, 2]
 
-- name: Actualizar la cache de paquetes en Debian y Ubuntu
+- name: Actualizar los índices de paquetes APT
   ansible.builtin.apt:
-    update_cache: yes
-    upgrade: safe
-    cache_valid_time: 3600
-  when: ansible_facts.pkg_mgr == 'apt'
-
-- name: Actualizar paquetes en Alpine
-  community.general.apk:
     update_cache: true
-    upgrade: true
-  when: ansible_facts.pkg_mgr == 'apk'
+    cache_valid_time: 3600
 
-- name: Instalar paquetes comunes del sistema
-  ansible.builtin.package:
+- name: Instalar herramientas comunes del sistema
+  ansible.builtin.apt:
     name:
       - curl
       - git
