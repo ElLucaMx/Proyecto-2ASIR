@@ -5,7 +5,7 @@ variable "libvirt_pool_name" {
   default     = "default"
 }
 
-# Imagen base Debian para ServidorWeb
+# Imagen base Debian para ServidorWeb y Almacenamiento
 variable "base_image_debian" {
   type        = string
   description = "Nombre de la imagen base Debian en el pool."
@@ -17,13 +17,6 @@ variable "base_image_ubuntu" {
   type        = string
   description = "Nombre de la imagen base Ubuntu en el pool."
   default     = "ubuntu2604-base.qcow2"
-}
-
-# Imagen base Alpine para ServidorAlmacenamiento
-variable "base_image_alpine" {
-  type        = string
-  description = "Nombre de la imagen base Alpine en el pool."
-  default     = "alpine-base.qcow2"
 }
 
 # Memoria RAM servidor ServidorWeb

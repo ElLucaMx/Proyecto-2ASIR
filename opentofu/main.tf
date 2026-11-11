@@ -99,14 +99,14 @@ resource "libvirt_domain" "ServidorDb" {
 }
 
 ##############################################
-# Servidor Backup — Alpine
+# Servidor Backup — Debian
 ##############################################
 
-# Clon de la imagen alpine
+# Clon de la imagen Debian 13
 resource "libvirt_volume" "ServidorAlmacenamiento-disk" {
   name             = "ServidorAlmacenamiento.qcow2"
   pool             = var.libvirt_pool_name
-  base_volume_name = var.base_image_alpine
+  base_volume_name = var.base_image_debian
   base_volume_pool = var.libvirt_pool_name
   format           = "qcow2"
 }
