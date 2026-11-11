@@ -1,9 +1,8 @@
 #cloud-config
-hostname: ServidorAlmacenamiento
 
+hostname: ServidorAlmacenamiento
 timezone: Europe/Madrid
 
-# Evitar actualizaciones automáticas durante la inicialización (específico para Alpine / estabilidad)
 package_update: false
 package_upgrade: false
 
@@ -11,10 +10,10 @@ package_upgrade: false
 ssh_pwauth: true
 disable_root: false
 
-# Crear explícitamente los usuarios
+# Usuario administrador
 users:
-  - name: alpine
-    gecos: Usuario administrador Almacenamiento
+  - name: user
+    gecos: Usuario administrador
     shell: /bin/ash
     groups:
       - wheel
@@ -27,12 +26,12 @@ users:
     ssh_authorized_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC5iXHvcDSji9AliZZtXdwQkmpyXLDsP5el7MLqzci0jXMVpZHUhN/H/uuVWqIPb/ToqPje7j865ARdoCN2WIELAeQeud/QNsK7N2FnxFDR/oMIJvPNmx0tJ0+GGnniI9t2//uy2H+JIbteRtT5wBMzjRtQK3UdpzBE0kiT36ssPyz22hRy9nDPRnVKm/MIgHa8ZnjBTpomM7KxLSdwUTxJP9SwoAz7ih1crcZFosDKowY6zDhvBZsMFokWtmnliPWtHgBTOyADiBBIPEHxqaI+ctmJcKsVpzxp/ZQlFySbP2vqCPcx1AABFlci+LLfaozCsHQyTJfiQzHKe5rgYHIs9k0UuAWk33uRSvpIlNXIVxnTqfQ5DMBeFxAiHfnZ4FbF5IEp74o/8SzYPTZS8bwN8gtoCHxPXl2B3GcReS76VqRcseBxlBX5WU3/SYme0oMyPdlK3hTFNg250ueVFN3+bJ0kM03pgHykuPIvawd3VL67lh5/4Mr3bIRsVGpI55M= usuario@Deby
 
-# Establecer contraseñas
+# Contraseñas
 chpasswd:
   expire: false
   users:
-    - name: alpine
-      password: alpine
+    - name: user
+      password: user
       type: text
     - name: root
       password: root
