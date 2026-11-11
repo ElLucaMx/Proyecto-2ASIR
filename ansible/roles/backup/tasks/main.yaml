@@ -1,0 +1,37 @@
+---
+- name: Instalar el servidor NFS
+  ansible.builtin.apt:
+    name: nfs-kernel-server
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Crear el directorio compartido para las copias de MariaDB
+  ansible.builtin.file:
+    path: "{{ nfs_export_path }}"
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: '0700'
+
+- name: Configurar la exportación NFS para el servidor de base de datos
+  ansible.builtin.lineinfile:
+    path: /etc/exports
+    regexp: '^{{ nfs_export_path | regex_escape }}\s+'
+    line: "{{ nfs_export_path }} {{ db_host }}(rw,sync,no_subtree_check,root_squash)"
+    state: present
+    create: true
+    backup: true
+
+- name: Asegurar que el servidor NFS está iniciado y habilitado
+  ansible.builtin.service:
+    name: nfs-kernel-server
+    state: started
+    enabled: true
+
+- name: Aplicar la configuración de exportaciones NFS
+  ansible.builtin.command:
+    argv:
+      - exportfs
+      - -ra
+  changed_when: false

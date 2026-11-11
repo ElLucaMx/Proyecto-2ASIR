@@ -1,24 +1,24 @@
 ---
 - name: Configurar infraestructura común en todos los servidores
   hosts: servidores
-  become: yes
+  become: true
   roles:
     - commons
 
-- name: Configurar el servidor de almacenamiento NFS
-  hosts: servidores_almacenamiento
-  become: yes
+- name: Configurar el servidor de copias de seguridad NFS
+  hosts: servidores_backup
+  become: true
   roles:
     - backup
 
 - name: Configurar el servidor de Base de Datos
   hosts: servidores_bd
-  become: yes
+  become: true
   roles:
     - bd
 
 - name: Configurar el Servidor Web y la aplicación
   hosts: servidores_web
-  become: yes
+  become: true
   roles:
     - web
