@@ -5,6 +5,12 @@
   roles:
     - commons
 
+- name: Configurar el servidor de almacenamiento NFS
+  hosts: servidores_almacenamiento
+  become: yes
+  roles:
+    - backup
+
 - name: Configurar el servidor de Base de Datos
   hosts: servidores_bd
   become: yes
