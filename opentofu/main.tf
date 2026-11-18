@@ -31,9 +31,9 @@ resource "libvirt_domain" "ServidorWeb" {
     wait_for_lease = true
   }
 
-  # Bridge br0 (acceso desde la red física)
+  # Red br0 (acceso desde la red física)
   network_interface {
-    bridge = "br0"
+    network_id = libvirt_network.br0.id
   }
 
   # Red soto-solitario (Aislada de datos)

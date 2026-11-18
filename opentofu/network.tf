@@ -16,3 +16,11 @@ resource "libvirt_network" "soto-solitario" {
   mode      = "none"
   autostart = true
 }
+
+# Red bridge br0 (acceso a la red física)
+resource "libvirt_network" "br0" {
+  name      = "br0"
+  mode      = "bridge"
+  bridge    = "br0"
+  autostart = true
+}
