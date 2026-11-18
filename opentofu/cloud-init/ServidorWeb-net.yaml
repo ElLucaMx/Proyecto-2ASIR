@@ -2,7 +2,9 @@ network:
   version: 2
   ethernets:
     ens3:
-      dhcp4: true                 # Red maria-dhcp
+      dhcp4: true                 # Red maria-dhcp (NAT)
     ens4:
+      dhcp4: true                 # Bridge br0 (red física)
+    ens5:
       dhcp4: false
-      addresses: ["10.0.0.1/24"]  # IP soto-solitario
+      addresses: ["10.0.0.1/24"]  # Red soto-solitario
