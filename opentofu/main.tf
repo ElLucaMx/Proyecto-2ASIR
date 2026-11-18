@@ -28,17 +28,20 @@ resource "libvirt_domain" "ServidorWeb" {
   # Red maria-dhcp (NAT)
   network_interface {
     network_id     = libvirt_network.maria-dhcp.id
+    mac            = "52:54:00:b6:d0:a1"
     wait_for_lease = true
   }
 
-  # Red br0 (acceso desde la red física)
+  # Red br0 (acceso a la red física)
   network_interface {
-    network_id = libvirt_network.br0.id
+    bridge = "br0"
+    mac    = "52:54:00:03:65:5e"
   }
 
-  # Red soto-solitario (Aislada de datos)
+  # Red soto-solitario (red aislada)
   network_interface {
     network_id = libvirt_network.soto-solitario.id
+    mac        = "52:54:00:36:a7:ea"
   }
 
   # Discos

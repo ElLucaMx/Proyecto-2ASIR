@@ -1,10 +1,19 @@
 network:
   version: 2
   ethernets:
-    ens3:
-      dhcp4: true                 # Red maria-dhcp (NAT)
-    ens4:
-      dhcp4: true                 # Bridge br0 (red física)
-    ens5:
+    maria-dhcp:
+      match:
+        macaddress: "52:54:00:b6:d0:a1"
+      dhcp4: true
+
+    br0:
+      match:
+        macaddress: "52:54:00:03:65:5e"
+      dhcp4: true
+
+    soto-solitario:
+      match:
+        macaddress: "52:54:00:36:a7:ea"
       dhcp4: false
-      addresses: ["10.0.0.1/24"]  # Red soto-solitario
+      addresses:
+        - 10.0.0.1/24
