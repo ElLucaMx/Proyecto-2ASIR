@@ -1,8 +1,12 @@
 network:
   version: 2
   ethernets:
-    ens3:
-      dhcp4: true              # Red maria-dhcp
-    ens4:
+    soto-solitario:
+      match:
+        macaddress: "52:54:00:db:00:02"
       dhcp4: false
-      addresses: ["10.0.0.2/24"]  # IP soto-solitario
+      addresses:
+        - 10.0.0.2/24
+      routes:
+        - to: default
+          via: 10.0.0.1

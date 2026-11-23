@@ -56,6 +56,7 @@ resource "libvirt_domain" "ServidorWeb" {
   }
 }
 
+
 ##############################################
 # Servidor Base de Datos — Ubuntu
 ##############################################
@@ -83,9 +84,10 @@ resource "libvirt_domain" "ServidorDb" {
   memory = var.memory_db
   vcpu   = 2
 
-  # Red soto-solitario
+  # Red soto-solitario (red aislada)
   network_interface {
     network_id = libvirt_network.soto-solitario.id
+    mac        = "52:54:00:db:00:02"
   }
 
   # Discos
@@ -99,6 +101,7 @@ resource "libvirt_domain" "ServidorDb" {
     target_type = "serial"
   }
 }
+
 
 ##############################################
 # Servidor Backup — Debian
@@ -127,9 +130,10 @@ resource "libvirt_domain" "ServidorAlmacenamiento" {
   memory = var.memory_almacenamiento
   vcpu   = 2
 
-  # Red soto-solitario
+  # Red soto-solitario (red aislada)
   network_interface {
     network_id = libvirt_network.soto-solitario.id
+    mac        = "52:54:00:ba:00:03"
   }
 
   # Discos

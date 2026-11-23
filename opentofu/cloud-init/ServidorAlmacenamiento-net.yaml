@@ -1,9 +1,12 @@
 network:
   version: 2
   ethernets:
-    ens3:
-      dhcp4: true
-    ens4:
+    soto-solitario:
+      match:
+        macaddress: "52:54:00:ba:00:03"
       dhcp4: false
       addresses:
         - 10.0.0.3/24
+      routes:
+        - to: default
+          via: 10.0.0.1
