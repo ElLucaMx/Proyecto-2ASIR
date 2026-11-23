@@ -83,13 +83,7 @@ resource "libvirt_domain" "ServidorDb" {
   memory = var.memory_db
   vcpu   = 2
 
-  # Red maria-dhcp (NAT)   
-  network_interface {
-    network_id     = libvirt_network.maria-dhcp.id
-    wait_for_lease = true
-  }
-
-  # Red soto-solitario (Aislada de datos)
+  # Red soto-solitario
   network_interface {
     network_id = libvirt_network.soto-solitario.id
   }
@@ -133,13 +127,7 @@ resource "libvirt_domain" "ServidorAlmacenamiento" {
   memory = var.memory_almacenamiento
   vcpu   = 2
 
-  # Red maria-dhcp (NAT)
-  network_interface {
-    network_id     = libvirt_network.maria-dhcp.id
-    wait_for_lease = true
-  }
-
-  # Red soto-solitario (Aislada de datos)
+  # Red soto-solitario
   network_interface {
     network_id = libvirt_network.soto-solitario.id
   }
