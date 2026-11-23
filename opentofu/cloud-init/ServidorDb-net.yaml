@@ -10,3 +10,7 @@ network:
       routes:
         - to: default
           via: 10.0.0.1
+      nameservers:
+        addresses:
+          - 1.1.1.1
+          - 8.8.8.8
