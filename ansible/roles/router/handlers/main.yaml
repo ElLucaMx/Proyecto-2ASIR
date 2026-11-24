@@ -1,0 +1,6 @@
+---
+- name: Aplicar configuración sysctl
+  ansible.builtin.command: sysctl --system
+
+- name: Recargar nftables
+  ansible.builtin.command: nft -f /etc/nftables.conf
