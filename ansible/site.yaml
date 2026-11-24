@@ -1,6 +1,18 @@
 ---
-- name: Configurar infraestructura común en todos los servidores
-  hosts: servidores
+- name: Configurar infraestructura común en ServidorWeb
+  hosts: servidores_web
+  become: true
+  roles:
+    - commons
+
+- name: Configurar ServidorWeb como router
+  hosts: servidores_web
+  become: true
+  roles:
+    - router
+
+- name: Configurar infraestructura común en DB y Backup
+  hosts: servidores_bd:servidores_backup
   become: true
   roles:
     - commons
