@@ -4,10 +4,10 @@
 web ansible_host=${ip_web} ansible_user=debian-web
 
 [servidores_bd]
-bd ansible_host=${ip_db} ansible_user=ubuntu-db
+bd ansible_host=${ip_db} ansible_user=ubuntu-db ansible_ssh_common_args='-o ProxyJump=debian-web@${ip_web}'
 
 [servidores_backup]
-backup ansible_host=${ip_almacenamiento} ansible_user=debian-alma
+backup ansible_host=${ip_almacenamiento} ansible_user=debian-alma ansible_ssh_common_args='-o ProxyJump=debian-web@${ip_web}'
 
 [servidores:children]
 servidores_web
