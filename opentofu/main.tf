@@ -21,9 +21,10 @@ resource "libvirt_cloudinit_disk" "ServidorWeb-cloudinit" {
 
 # Asignar recursos
 resource "libvirt_domain" "ServidorWeb" {
-  name   = "ServidorWeb"
-  memory = var.memory_web
-  vcpu   = 2
+  name       = "ServidorWeb"
+  memory     = var.memory_web
+  vcpu       = 2
+  qemu_agent = true
 
   # Red maria-dhcp (NAT)
   network_interface {
@@ -34,8 +35,9 @@ resource "libvirt_domain" "ServidorWeb" {
 
   # Red br0 (acceso a la red física)
   network_interface {
-    bridge = "br0"
-    mac    = "52:54:00:03:65:5e"
+    bridge         = "br0"
+    mac            = "52:54:00:03:65:5e"
+    wait_for_lease = true
   }
 
   # Red soto-solitario (red aislada)

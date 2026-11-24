@@ -20,3 +20,9 @@ chpasswd:
 
 package_update: true  # refresca índices de apt
 package_upgrade: true # aplica actualizaciones disponibles en el primer arranque
+
+packages:
+  - qemu-guest-agent
+
+runcmd:
+  - systemctl start qemu-guest-agent
