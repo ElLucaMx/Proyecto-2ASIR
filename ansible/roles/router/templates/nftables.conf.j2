@@ -1,0 +1,29 @@
+#!/usr/sbin/nft -f
+
+flush ruleset
+
+table inet filter {
+    chain input {
+        type filter hook input priority filter; policy accept;
+    }
+
+    chain forward {
+        type filter hook forward priority filter; policy drop;
+
+        ct state established,related accept
+
+        iifname "{{ router_lan_interface }}" oifname "{{ router_wan_interface }}" ip saddr 10.0.0.0/24 accept
+    }
+
+    chain output {
+        type filter hook output priority filter; policy accept;
+    }
+}
+
+table ip nat {
+    chain postrouting {
+        type nat hook postrouting priority srcnat; policy accept;
+
+        ip saddr 10.0.0.0/24 oifname "{{ router_wan_interface }}" masquerade
+    }
+}
