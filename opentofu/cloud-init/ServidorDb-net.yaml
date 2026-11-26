@@ -12,4 +12,5 @@ network:
           via: 10.0.0.1
       nameservers:
         addresses:
-          - 172.22.0.1
+        #  - 172.22.0.1
+          - 1.1.1.1
